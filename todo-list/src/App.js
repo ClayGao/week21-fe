@@ -6,8 +6,8 @@ const TaskInput = (props) => {
         <div>
             <h1>Hello, Enter you todo-list !</h1>
             <form>
-                <input className="inputBlcok" type="text" />
-                <input type="button" onClick={props.handle} />
+                <input className="inputBlcok" value={props.inputValue} onChange={props.handleInput} type="text" />
+                <input type="button" onClick={props.addTask} />
             </form>
         </div>
     )
@@ -18,39 +18,64 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            tasks :['哈哈','粗雌'],
+            tasks :[],
             taskText: '',
-            id: 0
+            id: 1
         }
-
         this.addTask = this.addTask.bind(this)
+        this.handleInput = this.handleInput.bind(this)
+        this.handleTask = this.handleTask.bind(this)
+        this.compeleteTask = this.compeleteTask.bind(this)
+        this.deleteTask = this.deleteTask.bind(this)
     }
 
-    addTask(e) {
-        const inputValue = 
+    handleInput(e) {
+        //console.log(this.state.taskText)
         this.setState({
-            tasks: [...this.state.tasks,inputValue],
-            id: this.state.id + 1
+            taskText: e.target.value
         })
     }
 
+    addTask(e) {
+        this.setState({
+            tasks: [...this.state.tasks, {
+                text: this.state.taskText, 
+                id: this.state.id,
+                isComplete: false
+            }],
+            id: this.state.id+1
+        })
+        this.state.taskText = ''
+    }
+
+    handleTask(e){
+        console.log(e.target.id)
+    }
+
+    compeleteTask(e){
+       console.log(e.target.id)
+    }
+
+    deleteTask(){
+
+    }
         
     render() {
-        const {tasks, taskText, id} = this.state
-
+        const {tasks, taskText} = this.state
+        
         return (
             <div>
-                <TaskInput handle={this.addTask} />
-                
+                <TaskInput inputValue={taskText} handleInput={this.handleInput} addTask={this.addTask} />
                 <div className="todo-list">
                     {tasks.map(task => (
-                        <div>{task}</div>
+                        <div>
+                            <span>{task.text}</span>
+                            <button id={task.id} onClick={this.compeleteTask}>Complete!</button>
+                            <button id={task.id}  onClick={this.deleteTask}>Delete</button>
+                        </div>
                     ))}
-                    <div>{id}</div>
                 </div>
-                
             </div>
-            
         )
     }
 }
