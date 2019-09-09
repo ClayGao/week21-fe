@@ -1,41 +1,42 @@
 // App.js
 import React, {Component} from 'react'
 
-const TaskInput = (props) => {
-        return (
-            <div>
-                <h1>Hello, Enter you todo-list !</h1>
-                <form>
-                    <input />
-                    <input type="button" onClick={props.handle} />
-                </form>
-            </div>
-        )
-    }
+const TaskInput = (props) => { 
+    return (
+        <div>
+            <h1>Hello, Enter you todo-list !</h1>
+            <form>
+                <input className="inputBlcok" type="text" />
+                <input type="button" onClick={props.handle} />
+            </form>
+        </div>
+    )
+}
 
 
 class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            tasks :['哈哈','粗雌']
+            tasks :['哈哈','粗雌'],
+            taskText: '',
+            id: 0
         }
 
         this.addTask = this.addTask.bind(this)
     }
 
-    addTask() {
-        
+    addTask(e) {
+        const inputValue = 
         this.setState({
-            tasks: this.state.tasks.push('ggg')
+            tasks: [...this.state.tasks,inputValue],
+            id: this.state.id + 1
         })
-        
-       console.log('123')
     }
 
         
     render() {
-        const {tasks} = this.state
+        const {tasks, taskText, id} = this.state
 
         return (
             <div>
@@ -45,6 +46,7 @@ class App extends Component {
                     {tasks.map(task => (
                         <div>{task}</div>
                     ))}
+                    <div>{id}</div>
                 </div>
                 
             </div>

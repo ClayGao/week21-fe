@@ -1,7 +1,6 @@
 {
   "name": "todo-list",
   "version": "1.0.0",
-  "description": "",
   "main": "webpack.config.js",
   "dependencies": {},
   "devDependencies": {
@@ -26,5 +25,6 @@
     "build": "webapck --mode production"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "description": ""
 }
