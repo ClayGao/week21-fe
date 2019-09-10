@@ -1,83 +1,76 @@
 // App.js
 import React, {Component} from 'react'
 
-const TaskInput = (props) => { 
-    return (
-        <div>
-            <h1>Hello, Enter you todo-list !</h1>
-            <form>
-                <input className="inputBlcok" value={props.inputValue} onChange={props.handleInput} type="text" />
-                <input type="button" onClick={props.addTask} />
-            </form>
-        </div>
-    )
-}
-
-
-class App extends Component {
+class Input extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            tasks :[],
-            taskText: '',
-            id: 1
-        }
-        this.addTask = this.addTask.bind(this)
-        this.handleInput = this.handleInput.bind(this)
-        this.handleTask = this.handleTask.bind(this)
-        this.compeleteTask = this.compeleteTask.bind(this)
-        this.deleteTask = this.deleteTask.bind(this)
     }
-
-    handleInput(e) {
-        //console.log(this.state.taskText)
-        this.setState({
-            taskText: e.target.value
-        })
-    }
-
-    addTask(e) {
-        this.setState({
-            tasks: [...this.state.tasks, {
-                text: this.state.taskText, 
-                id: this.state.id,
-                isComplete: false
-            }],
-            id: this.state.id+1
-        })
-        this.state.taskText = ''
-    }
-
-    handleTask(e){
-        console.log(e.target.id)
-    }
-
-    compeleteTask(e){
-       console.log(e.target.id)
-    }
-
-    deleteTask(){
-
-    }
-        
     render() {
-        const {tasks, taskText} = this.state
-        
+        return(
+            <form>
+                <input type="text" onChange={this.props.handleTaskText} className="taskInputBlock" value={this.props.taskText} />
+                <input type="button" onClick={this.props.addTask} value="Send" />
+           </form>
+        )
+    }
+}
+
+class TodoList extends Component {
+    constructor(props){
+        super(props)
+    }
+    render() {
+        const {tasks} = this.props // 為什麼是 undefined ?
+        console.log(this.props)
         return (
-            <div>
-                <TaskInput inputValue={taskText} handleInput={this.handleInput} addTask={this.addTask} />
-                <div className="todo-list">
-                    {tasks.map(task => (
-                        <div>
-                            <span>{task.text}</span>
-                            <button id={task.id} onClick={this.compeleteTask}>Complete!</button>
-                            <button id={task.id}  onClick={this.deleteTask}>Delete</button>
-                        </div>
-                    ))}
-                </div>
+            <div className="todo-list">
+               {/* 作到這邊 */}
             </div>
         )
     }
 }
+
+class App extends Component {
+    constructor() {
+        super()
+        this.state = {
+            tasks : [],
+            taskText : '',
+            taskId : 1
+        }
+        
+        this.addTask = this.addTask.bind(this)
+        this.handleTaskText = this.handleTaskText.bind(this)
+    }
+
+    handleTaskText(e) {
+        this.setState({
+            textText : e.target.value
+        })
+    }
+
+    addTask() {
+        this.setState({
+            tasks : [...this.state.tasks, {
+                taskId: this.state.taskId,
+                taskText: this.state.taskText,
+                isComplete: false
+            }],
+            taskId: this.state.taskId + 1
+        })
+        this.state.taskText = ''
+    }
+
+    render() {
+        return (
+            <div>
+                <Input inputValue={this.state.taskText} handleTaskText={this.handleTaskText} addTask={this.addTask} />
+                <TodoList todoListContext={this.state.tasks}/>
+            </div>
+           
+        )
+    }
+}
+ 
 
 export default App
