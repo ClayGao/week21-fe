@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
+import Gobang from './Gobang'
 
 // 當我執行並 render 時，選取到 id = root 的 DOM
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<Gobang />, document.getElementById('root'))
