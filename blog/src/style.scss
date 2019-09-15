@@ -1,0 +1,100 @@
+$nav-bg-color: transparent;
+$board-bg-color:rgba(110, 105, 105, 0.35);
+$article-border-color: wheat;
+$article-border-hover-color: rgb(235, 165, 0);
+
+
+body {
+    background: url('./img/bg.jpg')  center center fixed no-repeat;
+    background-size: cover;
+}
+
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+nav {
+    height: 30px;
+    background-color: $nav-bg-color;
+    span {
+        display: inline-block;
+        font-family: monospace;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        margin: 10px;
+        padding: 3px;
+        &~span {
+            margin-left: 15px;
+        }
+        &~span:hover {
+            border-bottom: 2px solid $article-border-hover-color;
+        }
+    } 
+}
+
+.wrapper {
+    margin: 0 auto;
+    height: auto;
+    width: 800px;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    .board {
+        height: auto;
+        width: 700px;
+        background-color: $board-bg-color;
+        margin-top: 80px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+        align-items: center;
+        .article {
+            position: relative;
+            height: 180px;
+            width: 675px;
+            border-bottom: 3px solid $article-border-color;
+            transition: 0.3s all;
+            &~.article {
+                margin-bottom: 25px;
+            }
+            &:hover {
+                border-color: $article-border-hover-color;
+            }
+            &-title {
+                padding: 5px 8px;
+                font-family: monospace;
+                font-size: 32px;
+                font-weight: bold;
+                color: white;
+                word-break: break-all;
+            }
+            &-text {
+                @extend .article-title;
+                font-size: 20px;
+            }
+            &-editor {
+                position: absolute;
+                bottom: 5px;
+                right: 0px;
+                @extend .article-title;
+                font-size: 20px;
+            }
+        }
+    }
+}
+
+footer {
+    padding: 15px;
+    bottom: 0px;
+    right: 6px;
+    font-family: monospace;
+    font-size: 8px;
+    font-weight: bold;
+    color: white;
+    word-break: break-all;
+    position: absolute;
+
+}
