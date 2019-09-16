@@ -36,16 +36,15 @@ nav {
 
 .wrapper {
     margin: 0 auto;
+    min-height: 900px;
     height: auto;
     width: 800px;
     padding: 30px;
-    display: flex;
-    justify-content: center;
     .board {
         height: auto;
         width: 700px;
         background-color: $board-bg-color;
-        margin-top: 80px;
+        margin: 100px auto;
         padding: 20px;
         display: flex;
         flex-direction: column-reverse;
@@ -53,12 +52,12 @@ nav {
         align-items: center;
         .article {
             position: relative;
-            height: 180px;
+            height: auto;
             width: 675px;
             border-bottom: 3px solid $article-border-color;
             transition: 0.3s all;
             &~.article {
-                margin-bottom: 25px;
+                margin-bottom: 50px;
             }
             &:hover {
                 border-color: $article-border-hover-color;
@@ -66,21 +65,30 @@ nav {
             &-title {
                 padding: 5px 8px;
                 font-family: monospace;
-                font-size: 32px;
+                font-size: 38px;
                 font-weight: bold;
                 color: white;
-                word-break: break-all;
+                word-break: break-word;
             }
             &-text {
                 @extend .article-title;
                 font-size: 20px;
             }
-            &-editor {
-                position: absolute;
+            &-editor {  
                 bottom: 5px;
-                right: 0px;
+                float: right;
                 @extend .article-title;
                 font-size: 20px;
+            }
+            &-back {
+                @extend .article-title;
+                font-size: 30px;
+                margin-top: 40px;
+                right: 10px;
+                transition: 0.2s all;
+                &:hover {
+                    color: $article-border-hover-color;
+                }
             }
         }
     }
@@ -95,6 +103,4 @@ footer {
     font-weight: bold;
     color: white;
     word-break: break-all;
-    position: absolute;
-
 }
