@@ -66,7 +66,7 @@ class Board extends Component {
             if (sum !== 5) {
                 return
             }
-            alert('遊戲結束 !，贏者是' + winner)
+            alert('GG ! Winner is ' + winner)
             this.setState({
                 gmaeIsOver: true
             })
@@ -138,15 +138,19 @@ class Board extends Component {
             }),
             isBlack : turnIsDone? !this.state.isBlack : this.state.isBlack
         },()=> {
-            this.props.addRound()
-            this.judgeWinner(id)
+            if(turnIsDone) {
+                this.props.addRound()
+                this.judgeWinner(id)
+            }
         })
     }
 
+    /*
     shouldComponentUpdate(nextState){
         if (nextState.gmaeIsOver === true) return false
         return true
     }
+    */
 
     
     render() {
@@ -175,20 +179,24 @@ class Gobang extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            nextIsBlack: true,
             gameRound : 0
         }
     }
 
     handleRound() {
+        const {nextIsBlack, gameRound} = this.state
         this.setState({
-            gameRound : this.state.gameRound + 1
+            nextIsBlack: !nextIsBlack,
+            gameRound : gameRound + 1
         }) 
     }
 
     render() {
+        const {nextIsBlack, gameRound} = this.state
         return (
             <div>
-                <div>第 {this.state.gameRound} 回合</div>
+                <div className="banner">第 {gameRound} 回合，輪到{nextIsBlack ? '黑子' : '白子'}</div>
                 <Board addRound={this.handleRound.bind(this)} />
             </div>
         )

@@ -106,7 +106,6 @@ class App extends Component {
                 <Input inputValue={taskText} handleTaskText={this.handleTaskText} addTask={this.addTask} />
                 <TodoList todoListContext={tasks} completeTask={this.completeTask} deleteTask={this.deleteTask}/>
             </div>
-           
         )
     }
 }
