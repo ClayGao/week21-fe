@@ -28,10 +28,11 @@ class Article extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isSingleArticle: false,
-            articleData: []
+            articleData: [],
+            isSingleArticle: false
         }
         this.handleServerData = this.handleServerData.bind(this)
+        this.showArticle = this.showArticle.bind(this)
     }
 
     handleServerData() {
@@ -41,46 +42,48 @@ class Article extends Component {
                 return resp.json()
             })
             .then(jsonData => {
-                 this.setState({
-                        isSingleArticle: false,
-                        articleData: jsonData
-                 })
+                jsonData.map(card => card.isShow = false)
+                this.setState({
+                    articleData: jsonData
+                })
             })
     }
-    
-    handleSingleServerData(id = '') {
-        let url = 'https://jsonplaceholder.typicode.com/posts'
-        fetch(url + id)
-            .then(resp => {
-                return resp.json()
-            })
-            .then(jsonData => {
-                 this.setState({
-                        isSingleArticle: true,
-                        articleData: jsonData
-                 })
-            })
-    }
-    
 
     componentDidMount() {
         this.handleServerData()
     }
+
+    showArticle(id) {
+        const {articleData} = this.state
+        this.setState({
+            articleData: articleData.map(card => {
+                if (card.id === id) {
+                    return {
+                        ...card,
+                        isShow: !card.isShow
+                    } 
+                } return card
+            })
+        })
+    }
     
     render(){
-        const {isSingleArticle, articleData} = this.state
+        const articleData = this.state.articleData
         return (
             <div  className="board">
             {articleData.map(card => (
-                <div className="article" onClick={this.handleSingleServerData.bind(this,'?id='+ card.id)}>
+                <div key={card.id} 
+                    className="article" 
+                    onClick={this.showArticle.bind(this, card.id)}>
                     <div className="article-title">
                         {card.title}
                     </div>
-                    {isSingleArticle && <div className="article-text">{card.body}</div>}
+                    {card.isShow && <div className="article-text">
+                        {card.body}
+                    </div>}
                     <div className="article-editor">
                         Editor: {card.userId}
                     </div>
-                    {isSingleArticle && <div className="article-back" onClick={this.handleServerData}>Go back</div>}
                 </div>
             ))}
             </div>
@@ -101,7 +104,7 @@ class Blog extends Component {
     }
 
     render() {
-        console.log(this.state.displayMode)
+        console.log('3')
         const displayMode = this.state.displayMode
         return (
             <div className="Blog">

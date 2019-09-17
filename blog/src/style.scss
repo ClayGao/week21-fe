@@ -71,6 +71,7 @@ nav {
                 word-break: break-word;
             }
             &-text {
+                transition: 0.2s all;
                 @extend .article-title;
                 font-size: 20px;
             }
