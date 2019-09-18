@@ -1,9 +1,8 @@
 import React, {Component} from 'react'
 import './style.scss'
 
-
-function InfoPage(props) {
-    return (
+const InfoPage = (props) => {
+   return ( 
         <div  className="board">
             <div className="article">
                 <div className="article-title">
@@ -28,13 +27,13 @@ class Article extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            articleData: [],
-            isSingleArticle: false
+            articleData: [], // JSON 回傳資料
         }
         this.handleServerData = this.handleServerData.bind(this)
         this.showArticle = this.showArticle.bind(this)
     }
 
+    // 串 API 取 JSON 資料
     handleServerData() {
         let url = 'https://jsonplaceholder.typicode.com/posts'
         fetch(url)
@@ -42,17 +41,14 @@ class Article extends Component {
                 return resp.json()
             })
             .then(jsonData => {
-                jsonData.map(card => card.isShow = false)
+                jsonData.map(card => card.isShow = false) // 多加一個布林值屬性，用以展開文章
                 this.setState({
                     articleData: jsonData
                 })
             })
     }
 
-    componentDidMount() {
-        this.handleServerData()
-    }
-
+    // Show 出指定的文章內容
     showArticle(id) {
         const {articleData} = this.state
         this.setState({
@@ -65,6 +61,10 @@ class Article extends Component {
                 } return card
             })
         })
+    }
+
+    componentDidMount() {
+        this.handleServerData()
     }
     
     render(){
@@ -95,7 +95,7 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            displayMode : 'list',
+            displayMode : 'list', // 預設為 List
         }
     }
 
@@ -103,6 +103,7 @@ class App extends Component {
         this.setState({ displayMode : mode })
     }
 
+    // Nav 部分可以優化成事件代理，render 部分則依照 this.state.displayMode 做渲染
     render() {
         const displayMode = this.state.displayMode
         return (
@@ -113,7 +114,7 @@ class App extends Component {
                     <span onClick={this.handleDisplayMode.bind(this, 'list')}>List</span>
                 </nav>
                 <div className="wrapper">
-                        {displayMode === 'list' && <Article handeDisplayMode={this.handleDisplayMode} />}
+                        {displayMode === 'list' && <Article />}
                         {displayMode === 'info' && <InfoPage />}
                 </div>
                 <footer>
