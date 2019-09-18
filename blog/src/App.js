@@ -9,15 +9,15 @@ function InfoPage(props) {
                 <div className="article-title">
                     Hi, Here is Blue Orange
                 </div>
-                <div className="article-editor">
-                    第二十一週作業作業做很久 冏
-                    第二十一週作業作業做很久 冏第二十一週作業作業做很久 冏
-                    第二十一週作業作業做很久 冏
-                    第二十一週作業作業做很久 冏
-                    第二十一週作業作業做很久 冏
-                    第二十一週作業作業做很久 冏
-                    第二十一週作業作業做很久 冏
-                    第二十一週作業作業做很久 冏
+                <div className="article-text">
+                    雖然是一個因應作業而誕生的小部落格，但是自己很喜歡這樣的背景
+                    <br />
+                    背景是取材自 Unsplash，同時也是 Trello 背景的圖片庫
+                    <br />
+                    大概就是這樣，未來幾周的作業將會優化這一份部落格
+                    <br />
+                    目前 Week21 的部分是串由老師提供的 API 
+                    <br />
                 </div>
             </div>
         </div>
@@ -91,7 +91,7 @@ class Article extends Component {
     }
 }
 
-class Blog extends Component {
+class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -104,12 +104,11 @@ class Blog extends Component {
     }
 
     render() {
-        console.log('3')
         const displayMode = this.state.displayMode
         return (
-            <div className="Blog">
+            <div className="App">
                 <nav>
-                    <span>ClayGao's Blog</span>
+                    <span>Blue Orange</span>
                     <span onClick={this.handleDisplayMode.bind(this, 'info')}>About</span>
                     <span onClick={this.handleDisplayMode.bind(this, 'list')}>List</span>
                 </nav>
@@ -125,4 +124,4 @@ class Blog extends Component {
     }
 }
 
-export default Blog
+export default App

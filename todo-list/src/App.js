@@ -27,8 +27,8 @@ class TodoList extends Component {
             <div className="todo-list">
                 {tasks.map(task => (
                     <div className="todo-list-task">
-                        <span>{task.isComplete ? `完成!` : `快去做!`}</span>
-                        <span dataid={task.taskId}>{task.taskText}</span>
+                        <span className="todo-list-task-is-done">{task.isComplete ? `O` : `X`}</span>
+                        <span className="todo-list-task-text" dataid={task.taskId}>{task.taskText}</span>
                         <input type="button" value="Complete" onClick={this.props.completeTask.bind(this,task.taskId)} />
                         <input type="button" value="Delete" onClick={this.props.deleteTask.bind(this,task.taskId)}/>
                     </div>
@@ -84,6 +84,10 @@ class App extends Component {
 
     addTask() {
         const {tasks, taskText, taskId} = this.state
+        if (!taskText) { 
+            alert('請輸入內容') 
+            return 
+        }
         this.setState({
             tasks : [...tasks, {
                 taskId: taskId,
@@ -93,17 +97,15 @@ class App extends Component {
             taskText: '',
             taskId : taskId + 1
         })
-        //console.log(tasks)
     }
 
     render() {
-        const {tasks, taskText, taskId} = this.state
+        const {tasks, taskText} = this.state
         return (
-            <div>
+            <div className="wrapper">
                 <Input inputValue={taskText} handleTaskText={this.handleTaskText} addTask={this.addTask} />
                 <TodoList todoListContext={tasks} completeTask={this.completeTask} deleteTask={this.deleteTask}/>
             </div>
-           
         )
     }
 }

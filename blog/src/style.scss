@@ -2,6 +2,8 @@ $nav-bg-color: transparent;
 $board-bg-color:rgba(110, 105, 105, 0.35);
 $article-border-color: wheat;
 $article-border-hover-color: rgb(235, 165, 0);
+$nav-hover-color: rgb(235, 165, 0);
+$article-hover-color :rgb(236, 200, 114);
 
 
 body {
@@ -26,11 +28,13 @@ nav {
         margin: 10px;
         padding: 3px;
         &~span {
+            cursor: pointer;
             margin-left: 15px;
+            &:hover {
+                border-bottom: 2px solid $nav-hover-color;
+            }
         }
-        &~span:hover {
-            border-bottom: 2px solid $article-border-hover-color;
-        }
+        
     } 
 }
 
@@ -63,33 +67,38 @@ nav {
                 border-color: $article-border-hover-color;
             }
             &-title {
+                cursor: pointer;
                 padding: 5px 8px;
                 font-family: monospace;
-                font-size: 38px;
+                font-size: 30px;
                 font-weight: bold;
                 color: white;
                 word-break: break-word;
+                transition: 0.3s all;
+                &:hover {
+                    color: $article-hover-color;
+                }
             }
             &-text {
-                transition: 0.2s all;
-                @extend .article-title;
+                padding: 5px 8px;
+                font-family: monospace;
                 font-size: 20px;
+                font-weight: bold;
+                color: white;
+                word-break: break-word;
+                &:hover {
+                    color: white;
+                }
             }
             &-editor {  
                 bottom: 5px;
                 float: right;
-                @extend .article-title;
+                padding: 5px 8px;
+                font-family: monospace;
+                font-weight: bold;
+                color: white;
+                word-break: break-word;
                 font-size: 20px;
-            }
-            &-back {
-                @extend .article-title;
-                font-size: 30px;
-                margin-top: 40px;
-                right: 10px;
-                transition: 0.2s all;
-                &:hover {
-                    color: $article-border-hover-color;
-                }
             }
         }
     }
