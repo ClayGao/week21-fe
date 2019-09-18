@@ -5,28 +5,53 @@ import './style.scss'
 class Board extends Component {
     constructor(props){
         super(props)
-
+        // 先建立一個 19*19 空陣列，創造棋盤格
         let squares = []
         for(let i = 0; i < 361; i++) {
             squares.push(
                 {
-                    playerColor : '',
-                    squareId : i+1
+                    playerColor : '', // 空棋盤格無顏色
+                    squareId : i+1 // 格子編號
                 }
             )
         }
         this.state = {
-            squares : squares,
-            isBlack: true,
-            gmaeIsOver: false
+            squares : squares, // 將棋盤格納入 state 中，以 render 棋盤格
+            isBlack: true,　// 黑子開場
+            gameIsOver: false // 判斷遊戲結束的依據
         }
-        this.judgeWinner = this.judgeWinner.bind(this)
+        this.judgeWinner = this.judgeWinner.bind(this) 
     }
 
-    judgeWinner(id) {
-        let x = id % 19 ? id % 19 : 19
-        let y = Math.floor((id - 1 ) / 19) + 1
+    // 下好離手
+    handleClick(id, playerIsBlack) {
+        let turnIsDone = false;　// 回合是否結束
+        this.setState({
+            squares: this.state.squares.map(square => {
+                if(square.squareId === id && !square.playerColor) {
+                    turnIsDone = true;
+                    return {
+                        ...square,
+                        playerColor: playerIsBlack ? 'black' : 'white'
+                    }
+                } 
+                return square
+            }),
+            isBlack : turnIsDone? !this.state.isBlack : this.state.isBlack // 如果回合結束，才換對方
+        },()=> {　// 更改完 state 立刻執行 function
+            if(turnIsDone) {
+                this.props.addRound()
+                this.judgeWinner(id)
+            }
+        })
+    }
 
+    // 判斷勝者
+    judgeWinner(id) {
+        let x = id % 19 ? id % 19 : 19 // 棋盤上落子 x 座標的計算方法
+        let y = Math.floor((id - 1 ) / 19) + 1 // 棋盤上落子 y 座標的計算方法
+
+        // 計算檢查起點 1 (左上 -> 右下)
         function countExamination1(x, y, id) {
             let newX = 0
             let newY = 0
@@ -39,7 +64,15 @@ class Board extends Component {
             examinationPoint = 19 * (newY - 1) + (newX)
             return examinationPoint
         }
+        
+        // 計算檢查起點 2 (左 -> 右)
+        function countExamination2(y) {
+            let examinationPoint = 0
+            examinationPoint = 19 * ( y - 1 ) + 1
+            return examinationPoint
+        }
 
+        // 計算檢查起點 3 (左下 -> 右上)
         function countExamination3(x, y, id) {
             let newX = 0
             let newY = 0
@@ -53,33 +86,37 @@ class Board extends Component {
             return examinationPoint
         }
 
-        // 判斷獲勝
+        // 計算檢查起點 4 (下 -> 上)
+        function countExamination4(x) {
+            let examinationPoint = 0
+            examinationPoint = 343 + ( x - 1)
+            return examinationPoint
+        }
+
+        // 判斷勝負與獲勝者，方法智障但寫起來單純
         function ChooseWinner(arr) {
-            let sum = 1
-            let winner = ''
-            for (let i = 0;i < 19; i++) {
-                if(arr[i] === arr[i+1] && (arr[i] === 'black' || arr[i] === 'white')) {
-                    winner = arr[i]
-                    sum++
-                }
+            for (let i = 0; i < arr.length; i++) {
+                if(arr[i] !== '' 
+                && arr[i] === arr[i+1]
+                && arr[i+1] === arr[i+2]
+                && arr[i+2] === arr[i+3]
+                && arr[i+3] === arr[i+4]) {
+                    alert('GGWP ! Winner is ' + arr[i+4].toUpperCase())
+                    this.setState({
+                        gameIsOver: true
+                    })
+                } 
             }
-            if (sum !== 5) {
-                return
-            }
-            alert('GG ! Winner is ' + winner)
-            this.setState({
-                gmaeIsOver: true
-            })
         }
 
         const examination1 = countExamination1(x,y,id) // 左上 -> 右下
-        const examination2 = 19 * ( y - 1 ) + 1 // 左 -> 右
+        const examination2 = countExamination2(y) // 左 -> 右
         const examination3 = countExamination3(x,y,id) // 左下 -> 右上
-        const examination4 = 343 + ( x - 1) // 下 -> 上
+        const examination4 = countExamination4(x) // 下 -> 上
        
         let listA = [], listB = [], listC = [], listD = []
         
-        // 左上 -> 右下
+        // 左上 -> 右下線
         for (let i = 0; i < 19; i++) {
             this.state.squares.map(square => {
                 if(square.squareId === examination1 + 20 * i) {
@@ -89,7 +126,7 @@ class Board extends Component {
         }
         ChooseWinner(listA)
 
-        // 左 -> 右
+        // 左 -> 右線
         for (let i = 0; i < 19; i++) {
             this.state.squares.map(square => {
                 if(square.squareId === examination2 + i) {
@@ -99,7 +136,7 @@ class Board extends Component {
         }
         ChooseWinner(listB)
 
-        // 左下 -> 右上
+        // 左下 -> 右上線
         for (let i = 0; i < 19; i++) {
             this.state.squares.map(square => {
                 if(square.squareId === examination3 - 18 * i) {
@@ -109,8 +146,7 @@ class Board extends Component {
         }
         ChooseWinner(listC)
 
-        // 下 -> 上
-
+        // 下 -> 上線
         for (let i = 0; i < 19; i++) {
             this.state.squares.map(square => {
                 if(square.squareId === examination4 -19 * i) {
@@ -119,39 +155,7 @@ class Board extends Component {
             })
         }
         ChooseWinner(listD)
-
     }
-
-    handleClick(id, playerIsBlack) {
-        
-        let turnIsDone = false;
-        this.setState({
-            squares: this.state.squares.map(square => {
-                if(square.squareId === id && !square.playerColor) {
-                    turnIsDone = true;
-                    return {
-                        ...square,
-                        playerColor: playerIsBlack ? 'black' : 'white'
-                    }
-                } 
-                return square
-            }),
-            isBlack : turnIsDone? !this.state.isBlack : this.state.isBlack
-        },()=> {
-            if(turnIsDone) {
-                this.props.addRound()
-                this.judgeWinner(id)
-            }
-        })
-    }
-
-    /*
-    shouldComponentUpdate(nextState){
-        if (nextState.gmaeIsOver === true) return false
-        return true
-    }
-    */
-
     
     render() {
         const currentPlayer = this.state.isBlack
@@ -161,11 +165,10 @@ class Board extends Component {
                 {squares.map(square => ( 
                     <div className="square" 
                         id={square.squareId} 
-                        onClick={this.handleClick.bind(this,square.squareId, currentPlayer)} 
-                    >
+                        onClick={this.handleClick.bind(this,square.squareId, currentPlayer)}>
                         <div className="x-line"></div>
                         <div className="y-line"></div>
-                        <div className="piece-preview"></div>
+                        <div className="piece-preview"></div> 
                         <div className={square.playerColor}></div>
                     </div>
                 ))}
@@ -174,13 +177,12 @@ class Board extends Component {
     }
 }
 
-
-class Gobang extends Component {
+class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            nextIsBlack: true,
-            gameRound : 0
+            nextIsBlack: true, // 單純用來判斷輪到誰
+            gameRound : 0 // 單純用來計算回合
         }
     }
 
@@ -203,4 +205,4 @@ class Gobang extends Component {
     }
 }
 
-export default Gobang
+export default App
