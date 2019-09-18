@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import './style.scss'
 
+
 class Input extends Component {
     constructor(props) {
         super(props)
@@ -53,6 +54,7 @@ class App extends Component {
         this.deleteTask = this.deleteTask.bind(this)
     }
 
+    // 完成選定 id 的 task
     completeTask(id) {
         const {tasks} = this.state
         this.setState({
@@ -67,6 +69,7 @@ class App extends Component {
         })
     }
 
+    // 刪除選定 id 的 task
     deleteTask(id) {
         const {tasks} = this.state
         this.setState({
@@ -76,6 +79,7 @@ class App extends Component {
         })
     }
 
+    // 上課範例方法，input 輸入同時改變 state 的值
     handleTaskText(e) {
         this.setState({
             taskText : e.target.value
